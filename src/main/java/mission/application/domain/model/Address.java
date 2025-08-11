@@ -10,4 +10,16 @@ public class Address {
         this.addressLat = addressLat;
         this.addressLng = addressLng;
     }
+
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public float getAddressLat() {
+        return addressLat;
+    }
+
+    public float getAddressLng() {
+        return addressLng;
+    }
 }

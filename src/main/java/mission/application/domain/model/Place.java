@@ -10,4 +10,12 @@ public class Place {
         this.placeName = placeName;
         this.placeAddress = placeAddress;
     }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
 }

@@ -5,12 +5,14 @@ import mission.application.domain.model.Place;
 import mission.application.port.input.Input;
 
 public class LogisticsInput implements Input {
-    public Place departure(){
-        String response = Console.readLine();
-        return null;
+    public String departure(){
+        System.out.println("출발지를 입력해주세요.");
+        System.out.print(">");
+        return Console.readLine();
     }
-    public Place destination(){
-        String response = Console.readLine();
-        return null;
+    public String arrival(){
+        System.out.println("도착지를 입력해주세요.");
+        System.out.print(">");
+        return Console.readLine();
     }
 }
