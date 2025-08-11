@@ -7,20 +7,38 @@ import mission.adapter.loader.AddressLoader;
 import mission.adapter.loader.PlaceLoader;
 import mission.application.domain.model.Address;
 import mission.application.domain.model.Place;
+import mission.application.port.input.Input;
+import mission.application.port.output.Output;
 
 public class LogisticsService {
+    private final Input input;
+    private final Output output;
     private static final double EARTH_RADIUS_KM = 6371.0;
-    LogisticsInput logisticsInput = new LogisticsInput();
+
     private List<Place> places = PlaceLoader.loadFromCsv("src/main/resources/place.csv");
-    private List<Address> addresses = AddressLoader.loadFromCsv("src/main/resources/address.csv");
+    private List<Address> addresses = AddressLoader.loadFromCsv("src/main/resources/position.csv");
 
-    public LogisticsService() {
+    public LogisticsService(Input input, Output output) {
+        this.input = input;
+        this.output = output;
+    }
 
+    public void run(){
+        output.output("출발지를 입력하세요.");
+        String departureInput = input.departure();
+        output.output("도착지를 입력하세요.");
+        String arrivalInput = input.arrival();
+
+        Address departure = departureAddress(departureInput);
+        Address arrival = arrivalAddress(arrivalInput);
+
+        double distance = calculateDistance(departure.getAddressLat(), departure.getAddressLng(), arrival.getAddressLat(), arrival.getAddressLng());
+        LocalTime arrivalTime = measureArrivalTime(distance);
+        output.getArrivalTime(arrivalTime);
     }
 
     //출발지 addressId 생성
-    public Address departureAddress(){
-        String input = logisticsInput.departure();
+    public Address departureAddress(String input){
         Place DeparturePlace = places.stream().filter(p -> p.getPlaceName().equals(input))
                 .findFirst().orElse(null);
         return addresses.stream().filter(a->a.getAddressId() == DeparturePlace.getPlaceId())
@@ -28,15 +46,14 @@ public class LogisticsService {
     }
 
     //도착지 addressId 생성
-    public Address arrivalAddress(){
-        String input = logisticsInput.arrival();
+    public Address arrivalAddress(String input){
         Place ArrivalPlace =  places.stream().filter(p->p.getPlaceName().equals(input))
                 .findFirst().orElse(null);
         return addresses.stream().filter(a->a.getAddressId() == ArrivalPlace.getPlaceId())
                 .findFirst().orElse(null);
     }
 
-    //위도, 경도 이용한 도착시간 예측
+    //위도, 경도 이용한 거리 계산
     public double calculateDistance(float lattitude1, float longitude1, float lattitude2, float longitude2) {
         double latRad1 = Math.toRadians(lattitude1);
         double lonRad1 = Math.toRadians(longitude1);

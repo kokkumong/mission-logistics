@@ -9,4 +9,9 @@ public class ArrivalTimeOutput implements Output {
     public void getArrivalTime(LocalTime arrivalTime){
         System.out.println("이동 시간은 " + arrivalTime + "으로 예측됩니다.");
     }
+
+    @Override
+    public void output(String message) {
+        System.out.println(message);
+    }
 }

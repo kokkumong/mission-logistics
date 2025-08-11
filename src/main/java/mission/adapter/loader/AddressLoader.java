@@ -17,11 +17,11 @@ public class AddressLoader{
 
             while((line = br.readLine()) != null) {
                 String [] parts = line.split(",");
-                int adressId = Integer.parseInt(parts[0].trim());
-                float adressLat = Float.parseFloat(parts[1].trim());
-                float adressLng = Float.parseFloat(parts[2].trim());
+                int addressId = Integer.parseInt(parts[0].trim());
+                float addressLat = Float.parseFloat(parts[1].trim());
+                float addressLng = Float.parseFloat(parts[2].trim());
 
-                addresses.add(new Address(adressId, adressLat, adressLng));
+                addresses.add(new Address(addressId, addressLat, addressLng));
             }
         }
         catch(FileNotFoundException e){

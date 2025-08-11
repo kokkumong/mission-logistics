@@ -4,4 +4,5 @@ import java.time.LocalTime;
 
 public interface Output {
     void getArrivalTime(LocalTime arrivalTime);
+    void output(String message);
 }
