@@ -2,9 +2,9 @@ package mission.application.service;
 
 import java.time.LocalTime;
 import java.util.List;
-import mission.adapter.inadapter.LogisticsInput;
 import mission.adapter.loader.AddressLoader;
 import mission.adapter.loader.PlaceLoader;
+import mission.application.domain.exception.CsvNotFoundException;
 import mission.application.domain.model.Address;
 import mission.application.domain.model.Place;
 import mission.application.port.input.Input;
@@ -25,9 +25,9 @@ public class LogisticsService {
 
     public void run(){
         output.output("출발지를 입력하세요.");
-        String departureInput = input.departure();
+        String departureInput = input.region();
         output.output("도착지를 입력하세요.");
-        String arrivalInput = input.arrival();
+        String arrivalInput = input.region();
 
         Address departure = departureAddress(departureInput);
         Address arrival = arrivalAddress(arrivalInput);
@@ -37,15 +37,17 @@ public class LogisticsService {
         output.getArrivalTime(arrivalTime);
     }
 
-    //출발지 addressId 생성
     public Address departureAddress(String input){
-        Place DeparturePlace = places.stream().filter(p -> p.getPlaceName().equals(input))
-                .findFirst().orElse(null);
-        return addresses.stream().filter(a->a.getAddressId() == DeparturePlace.getPlaceId())
-                .findFirst().orElse(null);
+        try{
+            Place DeparturePlace = places.stream().filter(p -> p.getPlaceName().equals(input))
+                    .findFirst().orElse(null);
+            return addresses.stream().filter(a->a.getAddressId() == DeparturePlace.getPlaceId())
+                    .findFirst().orElse(null);
+        } catch(Exception e){
+            throw new CsvNotFoundException("csv 파일에서 정보를 찾을 수 없습니다.");
+        }
     }
 
-    //도착지 addressId 생성
     public Address arrivalAddress(String input){
         Place ArrivalPlace =  places.stream().filter(p->p.getPlaceName().equals(input))
                 .findFirst().orElse(null);
@@ -53,7 +55,6 @@ public class LogisticsService {
                 .findFirst().orElse(null);
     }
 
-    //위도, 경도 이용한 거리 계산
     public double calculateDistance(float lattitude1, float longitude1, float lattitude2, float longitude2) {
         double latRad1 = Math.toRadians(lattitude1);
         double lonRad1 = Math.toRadians(longitude1);
@@ -66,7 +67,6 @@ public class LogisticsService {
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(latRad1) * Math.cos(latRad2) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return EARTH_RADIUS_KM * c;
