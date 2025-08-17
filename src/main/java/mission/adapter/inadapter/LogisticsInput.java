@@ -5,11 +5,11 @@ import mission.application.domain.exception.InvalidArgumentException;
 import mission.application.port.input.Input;
 
 public class LogisticsInput implements Input {
-    public String region(){
+    public String logisticsInformation(){
         try{
             return Console.readLine();
         } catch (Exception e){
-            throw new InvalidArgumentException("InvalidArgumentException : " + "\"Console.readLine()\"" + "을(를) 이름으로 갖는 장소는 존재하지 않습니다.");
+            throw new IllegalArgumentException("IllegalArgumentException : \"" + Console.readLine() + "\"을(를) 이름으로 갖는 장소는 존재하지 않습니다.");
         }
     }
 }

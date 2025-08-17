@@ -1,8 +1,9 @@
 package mission.application.port.output;
 
-import java.time.LocalTime;
+import java.time.Duration;
 
 public interface Output {
-    void getArrivalTime(LocalTime arrivalTime);
     void output(String message);
+    void startDelivery(int id, Duration deliveryDuration);
+    void completeDelivery(int id);
 }
