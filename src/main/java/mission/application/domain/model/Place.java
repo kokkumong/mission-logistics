@@ -18,4 +18,6 @@ public class Place {
     public int getPlaceId() {
         return placeId;
     }
+
+
 }
